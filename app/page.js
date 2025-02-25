@@ -5,12 +5,14 @@ import { useEffect, useRef, useState } from "react";
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState(false);
+  const [loading, setLoading] = useState(true);
   const inputRef = useRef("");
 
   useEffect(() => {
     fetch(process.env.NEXT_PUBLIC_API_URL + "/posts")
       .then((response) => response.json())
-      .then((data) => setPosts(data));
+      .then((data) => setPosts(data))
+      .finally(() => setLoading(false));
   }, []);
 
   const searchPost = (e) => {
@@ -47,28 +49,33 @@ export default function Home() {
           {search ? "..." : "Search"}
         </button>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-2">
-        {posts?.map((post, i) => (
-          <Link key={i} href={"/post/" + post._id}>
-            <div className="border border-gray-200 p-4 h-full">
-              <img
-                className="w-full h-48 object-cover mb-4"
-                src={post.image}
-                alt="Post Image"
-                width={"auto"}
-                height={"auto"}
-              />
-              <h2 className="text-xl font-semibold mb-2"> {post.title} </h2>
-              <p className="text-gray-600">{post.short_description}</p>
-            </div>
-          </Link>
-        ))}
-        {!posts.length > 0 && inputRef.current.value && (
-          <p>
-            No posts available for this query: <b> {inputRef.current.value} </b>
-          </p>
-        )}
-      </div>
+      {loading ? (
+        <p className="text-center text-gray-500 p-10">Loading posts...</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-2">
+          {posts?.map((post, i) => (
+            <Link key={i} href={"/post/" + post._id}>
+              <div className="border border-gray-200 p-4 h-full">
+                <img
+                  className="w-full h-48 object-cover mb-4"
+                  src={post.image}
+                  alt="Post Image"
+                  width={"auto"}
+                  height={"auto"}
+                />
+                <h2 className="text-xl font-semibold mb-2"> {post.title} </h2>
+                <p className="text-gray-600">{post.short_description}</p>
+              </div>
+            </Link>
+          ))}
+          {!posts.length > 0 && inputRef.current.value && (
+            <p>
+              No posts available for this query:{" "}
+              <b> {inputRef.current.value} </b>
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

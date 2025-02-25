@@ -4,8 +4,9 @@ export async function generateMetadata({ params }) {
   const { id } = params;
 
   try {
-    const post = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/post/${id}`)
-      .then((response) => response.json());
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/post/${id}`);
+    const text = await response.text();
+    const post = JSON.parse(text);
 
     return {
       title: post?.title || "Post Not Found",
