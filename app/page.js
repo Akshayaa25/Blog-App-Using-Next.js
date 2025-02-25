@@ -1,4 +1,5 @@
 "use client"
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -47,10 +48,10 @@ export default function Home() {
                 </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-2">
-                {posts.map((post) => (
-                    <Link href={"/post/"+post._id}>
+                {posts?.map((post, i) => (
+                    <Link key={i} href={"/post/"+post._id}>
                     <div className="border border-gray-200 p-4 h-full">
-                        <img
+                        <Image
                             className="w-full h-48 object-cover mb-4"
                             src={post.image}
                             alt="Post Image"

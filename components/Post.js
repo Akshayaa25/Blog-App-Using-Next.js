@@ -15,7 +15,7 @@ export default function Post({params}) {
   return (
     <>
     {post &&
-        <main className="container mx-auto px-4 py-6">
+        <main className="container mx-auto px-4 py-6 mb-[100px]">
             <h2 className="text-4xl font-bold mb-4"> {post.title} </h2>
             <p className="text-gray-500"> {post.created_at_formatted} </p>
             <img width={400} height={300} src={post.image} alt="Post Image" className="my-4"/>
